@@ -19,7 +19,7 @@ targets:
     workspace:
       host: https://8259552087648510.0.gcp.databricks.com  # REPLACE: dev workspace URL
     variables:
-      catalog: REPLACE_dev_catalog                            # REPLACE: e.g. edp_dev
+      catalog: we_databricks_poc                            # REPLACE: e.g. edp_dev
 
   # ---------- UAT: deployed after approval ----------
   uat:
