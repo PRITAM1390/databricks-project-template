@@ -32,24 +32,24 @@ targets:
   uat:
     mode: production
     workspace:
-      host: https://REPLACE-uat-workspace.cloud.databricks.com
+      host: https://8259552087648510.0.gcp.databricks.com
     run_as:
-      service_principal_name: REPLACE-uat-sp-application-id
+      service_principal_name: fc5e275e-cdc6-429a-8cc0-26077d3bb94f
     variables:
       catalogs:
-        bronze: bronze_uat
-        silver: silver_uat
-        gold: gold_uat
+        bronze: poc_dbx_mkt
+        silver: poc_dbx_mkt
+        gold: poc_dbx_mkt
 
   # ---------- PROD: deployed after approval ----------
   prod:
     mode: production
     workspace:
-      host: https://REPLACE-prod-workspace.cloud.databricks.com
+      host: https://8259552087648510.0.gcp.databricks.com
     run_as:
-      service_principal_name: REPLACE-prod-sp-application-id
+      service_principal_name: fc5e275e-cdc6-429a-8cc0-26077d3bb94f
     variables:
       catalogs:
-        bronze: bronze_prod
-        silver: silver_prod
-        gold: gold_prod
+        bronze: poc_dbx_mkt
+        silver: poc_dbx_mkt
+        gold: poc_dbx_mkt
