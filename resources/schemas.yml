@@ -1,16 +1,16 @@
 resources:
   schemas:
     bronze:
-      catalog_name: ${var.catalog}
+      catalog_name: ${var.catalogs.bronze}
       name: bronze
       comment: Raw ingested data, as received from sources
 
     silver:
-      catalog_name: ${var.catalog}
+      catalog_name: ${var.catalogs.silver}
       name: silver
       comment: Cleansed, validated, conformed data
 
     gold:
-      catalog_name: ${var.catalog}
+      catalog_name: ${var.catalogs.gold}
       name: gold
       comment: Business-level tables for reporting

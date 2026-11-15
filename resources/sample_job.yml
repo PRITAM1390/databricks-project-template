@@ -1,11 +1,35 @@
+# Sample medallion job: proves deployment and parameters work in every environment.
+# Delete once the project has real jobs.
 resources:
   jobs:
     sample_job:
       name: sample_job
       tasks:
-        - task_key: write_sample
+        - task_key: bronze_ingest
           notebook_task:
-            notebook_path: ../src/sample_ingest.py
+            notebook_path: ../src/pipelines/bronze/bronze_ingest.py
             base_parameters:
-              catalog: ${var.catalog}
+              bronze_catalog: ${var.catalogs.bronze}
               bronze_schema: ${resources.schemas.bronze.name}
+
+        - task_key: silver_transform
+          depends_on:
+            - task_key: bronze_ingest
+          notebook_task:
+            notebook_path: ../src/pipelines/silver/silver_transform.py
+            base_parameters:
+              bronze_catalog: ${var.catalogs.bronze}
+              bronze_schema: ${resources.schemas.bronze.name}
+              silver_catalog: ${var.catalogs.silver}
+              silver_schema: ${resources.schemas.silver.name}
+
+        - task_key: gold_aggregate
+          depends_on:
+            - task_key: silver_transform
+          notebook_task:
+            notebook_path: ../src/pipelines/gold/gold_aggregate.py
+            base_parameters:
+              silver_catalog: ${var.catalogs.silver}
+              silver_schema: ${resources.schemas.silver.name}
+              gold_catalog: ${var.catalogs.gold}
+              gold_schema: ${resources.schemas.gold.name}

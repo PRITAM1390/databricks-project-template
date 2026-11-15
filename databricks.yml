@@ -1,42 +1,55 @@
 # ============================================================
-# PROJECT SETUP: change the values marked REPLACE for each project
+# PROJECT SETUP: replace every value marked REPLACE
 # ============================================================
 bundle:
-  name: my_project            # REPLACE: e.g. avaada_edp
+  name: my_project                      # REPLACE: e.g. avaada_edp
 
 include:
   - resources/*.yml
 
 variables:
-  catalog:
-    description: Unity Catalog for this environment (must already exist)
+  catalogs:
+    type: complex
+    description: >
+      Catalog per layer. Catalogs must already exist (created by Terraform/admin).
+      One-catalog project: use the same catalog name for every layer.
+      More catalogs: add keys and use them as ${var.catalogs.<key>}.
 
 targets:
-  # ---------- DEV: deployed automatically on merge ----------
+  # ---------- DEV: auto-deployed on merge ----------
   dev:
     mode: development
     default: true
     workspace:
-      host: https://8259552087648510.0.gcp.databricks.com  # REPLACE: dev workspace URL
+      host: https://8259552087648510.0.gcp.databricks.com   # REPLACE
     variables:
-      catalog: we_databricks_poc                            # REPLACE: e.g. edp_dev
+      catalogs:
+        bronze: we_databricks_poc              # REPLACE
+        silver: we_databricks_poc              # REPLACE
+        gold: we_databricks_poc                  # REPLACE
 
   # ---------- UAT: deployed after approval ----------
   uat:
     mode: production
     workspace:
-      host: https://8259552087648510.0.gcp.databricks.com  # REPLACE
+      host: https://REPLACE-uat-workspace.cloud.databricks.com
     run_as:
-      service_principal_name: REPLACE-uat-sp-application-id     # REPLACE
+      service_principal_name: REPLACE-uat-sp-application-id
     variables:
-      catalog: REPLACE_uat_catalog                              # REPLACE
+      catalogs:
+        bronze: bronze_uat
+        silver: silver_uat
+        gold: gold_uat
 
   # ---------- PROD: deployed after approval ----------
   prod:
     mode: production
     workspace:
-      host: https://8259552087648510.0.gcp.databricks.com # REPLACE
+      host: https://REPLACE-prod-workspace.cloud.databricks.com
     run_as:
-      service_principal_name: REPLACE-prod-sp-application-id    # REPLACE
+      service_principal_name: REPLACE-prod-sp-application-id
     variables:
-      catalog: REPLACE_prod_catalog                             # REPLACE
+      catalogs:
+        bronze: bronze_prod
+        silver: silver_prod
+        gold: gold_prod

@@ -1,0 +1,13 @@
+# Creates/updates table structures. Run after every deploy.
+# Add one task per table DDL file in src/ddl/<layer>/.
+resources:
+  jobs:
+    ddl_setup:
+      name: ddl_setup
+      tasks:
+        - task_key: bronze_orders
+          notebook_task:
+            notebook_path: ../src/ddl/bronze/orders.sql
+            base_parameters:
+              catalog: ${var.catalogs.bronze}
+              schema: ${resources.schemas.bronze.name}
