@@ -1,0 +1,73 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+env:
+  DATABRICKS_AUTH_TYPE: oauth-m2m
+
+jobs:
+  deploy-dev:
+    name: Deploy to DEV
+    runs-on: ubuntu-latest
+    environment: dev
+    env:
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+      - name: Validate bundle
+        run: databricks bundle validate -t dev
+      - name: Deploy bundle
+        run: databricks bundle deploy -t dev
+      - name: Run DDL setup
+        run: databricks bundle run ddl_setup -t dev
+
+  deploy-uat:
+    name: Deploy to UAT
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment: uat
+    env:
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+      - name: Validate bundle
+        run: databricks bundle validate -t uat
+      - name: Deploy bundle
+        run: databricks bundle deploy -t uat
+      - name: Run DDL setup
+        run: databricks bundle run ddl_setup -t uat
+
+  deploy-prod:
+    name: Deploy to PROD
+    needs: deploy-uat
+    runs-on: ubuntu-latest
+    environment: prod
+    env:
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+      - name: Validate bundle
+        run: databricks bundle validate -t prod
+      - name: Deploy bundle
+        run: databricks bundle deploy -t prod
+      - name: Run DDL setup
+        run: databricks bundle run ddl_setup -t prod
