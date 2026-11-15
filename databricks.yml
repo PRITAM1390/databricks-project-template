@@ -1,0 +1,42 @@
+# ============================================================
+# PROJECT SETUP: change the values marked REPLACE for each project
+# ============================================================
+bundle:
+  name: my_project            # REPLACE: e.g. avaada_edp
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: Unity Catalog for this environment (must already exist)
+
+targets:
+  # ---------- DEV: deployed automatically on merge ----------
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://8259552087648510.0.gcp.databricks.com  # REPLACE: dev workspace URL
+    variables:
+      catalog: REPLACE_dev_catalog                            # REPLACE: e.g. edp_dev
+
+  # ---------- UAT: deployed after approval ----------
+  uat:
+    mode: production
+    workspace:
+      host: https://8259552087648510.0.gcp.databricks.com  # REPLACE
+    run_as:
+      service_principal_name: REPLACE-uat-sp-application-id     # REPLACE
+    variables:
+      catalog: REPLACE_uat_catalog                              # REPLACE
+
+  # ---------- PROD: deployed after approval ----------
+  prod:
+    mode: production
+    workspace:
+      host: https://8259552087648510.0.gcp.databricks.com # REPLACE
+    run_as:
+      service_principal_name: REPLACE-prod-sp-application-id    # REPLACE
+    variables:
+      catalog: REPLACE_prod_catalog                             # REPLACE
