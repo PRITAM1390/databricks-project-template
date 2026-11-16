@@ -40,6 +40,17 @@ targets:
         bronze: poc_dbx_mkt
         silver: poc_dbx_mkt
         gold: poc_dbx_mkt
+    resources:
+      schemas:
+        bronze:
+          lifecycle:
+            prevent_destroy: true
+        silver:
+          lifecycle:
+            prevent_destroy: true
+        gold:
+          lifecycle:
+            prevent_destroy: true
 
   # ---------- PROD: deployed after approval ----------
   prod:
@@ -53,3 +64,14 @@ targets:
         bronze: poc_dbx_mkt
         silver: poc_dbx_mkt
         gold: poc_dbx_mkt
+    resources:
+      schemas:
+        bronze:
+          lifecycle:
+            prevent_destroy: true
+        silver:
+          lifecycle:
+            prevent_destroy: true
+        gold:
+          lifecycle:
+            prevent_destroy: true
