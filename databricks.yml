@@ -14,6 +14,14 @@ variables:
       Catalog per layer. Catalogs must already exist (created by Terraform/admin).
       One-catalog project: use the same catalog name for every layer.
       More catalogs: add keys and use them as ${var.catalogs.<key>}.
+      Each target must use its own catalogs; never reuse catalog names across targets.
+
+  alerts:
+    type: complex
+    description: >
+      Failure-alert email per team (use group mailboxes).
+      Add a key per team and use it in jobs as ${var.alerts.<key>}.
+      Every key used by a job must exist in every target.
 
 targets:
   # ---------- DEV: auto-deployed on merge ----------
@@ -27,19 +35,29 @@ targets:
         bronze: we_databricks_poc              # REPLACE
         silver: we_databricks_poc              # REPLACE
         gold: we_databricks_poc                  # REPLACE
+      alerts:
+        platform: pritam.chaurasiya@ganitinc.com     # REPLACE
+        sap_team: pritam.chaurasiya@ganitinc.com     # REPLACE
+        # hr_team: your-email@example.com      # REPLACE
+        # fin_team: your-email@example.com     # REPLACE
 
   # ---------- UAT: deployed after approval ----------
   uat:
     mode: production
     workspace:
-      host: https://8259552087648510.0.gcp.databricks.com
+      host: https://8259552087648510.0.gcp.databricks.com   # REPLACE
     run_as:
-      service_principal_name: fc5e275e-cdc6-429a-8cc0-26077d3bb94f
+      service_principal_name: fc5e275e-cdc6-429a-8cc0-26077d3bb94f   # REPLACE
     variables:
       catalogs:
         bronze: poc_dbx_mkt
         silver: poc_dbx_mkt
         gold: poc_dbx_mkt
+      alerts:
+        platform: your-email@example.com
+        sap_team: your-email@example.com
+        hr_team: your-email@example.com
+        fin_team: your-email@example.com
     resources:
       schemas:
         bronze:
@@ -56,14 +74,19 @@ targets:
   prod:
     mode: production
     workspace:
-      host: https://8259552087648510.0.gcp.databricks.com
+      host: https://8259552087648510.0.gcp.databricks.com   # REPLACE
     run_as:
-      service_principal_name: fc5e275e-cdc6-429a-8cc0-26077d3bb94f
+      service_principal_name: fc5e275e-cdc6-429a-8cc0-26077d3bb94f   # REPLACE
     variables:
       catalogs:
         bronze: poc_dbx_mkt
         silver: poc_dbx_mkt
         gold: poc_dbx_mkt
+      alerts:
+        platform: your-email@example.com
+        sap_team: your-email@example.com
+        hr_team: your-email@example.com
+        fin_team: your-email@example.com
     resources:
       schemas:
         bronze:

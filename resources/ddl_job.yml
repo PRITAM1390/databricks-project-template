@@ -4,6 +4,9 @@ resources:
   jobs:
     ddl_setup:
       name: ddl_setup
+      email_notifications:
+        on_failure:
+          - ${var.alerts.platform}
       tasks:
         - task_key: bronze_orders
           notebook_task:
