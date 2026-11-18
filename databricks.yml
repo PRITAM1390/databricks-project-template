@@ -46,6 +46,7 @@ targets:
     mode: production
     workspace:
       host: https://8259552087648510.0.gcp.databricks.com   # REPLACE
+      root_path: /Workspace/Users/fc5e275e-cdc6-429a-8cc0-26077d3bb94f/.bundle/${bundle.name}/${bundle.target}
     run_as:
       service_principal_name: fc5e275e-cdc6-429a-8cc0-26077d3bb94f   # REPLACE
     variables:
@@ -75,6 +76,7 @@ targets:
     mode: production
     workspace:
       host: https://8259552087648510.0.gcp.databricks.com   # REPLACE
+      root_path: /Workspace/Users/fc5e275e-cdc6-429a-8cc0-26077d3bb94f/.bundle/${bundle.name}/${bundle.target}
     run_as:
       service_principal_name: fc5e275e-cdc6-429a-8cc0-26077d3bb94f   # REPLACE
     variables:
