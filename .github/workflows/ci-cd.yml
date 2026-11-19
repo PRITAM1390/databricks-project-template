@@ -73,9 +73,29 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install tools
+        run: pip install -r requirements-dev.txt
       - name: Install Databricks CLI
         uses: databricks/setup-cli@main
       - name: Deploy bundle
         run: databricks bundle deploy -t ${{ needs.resolve.outputs.target }}
-      - name: Run DDL setup
-        run: databricks bundle run ddl_setup -t ${{ needs.resolve.outputs.target }}
+      - name: Run changed DDL
+        run: |
+          BEFORE="${{ github.event.before }}"
+          if [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+            FILES=$(git ls-files 'src/ddl/*.sql' 'src/ddl/**/*.sql')
+          else
+            FILES=$(git diff --name-only --no-renames --diff-filter=AM "$BEFORE" "${{ github.sha }}" -- src/ddl | grep '\.sql$' || true)
+          fi
+          if [ -z "$FILES" ]; then
+            echo "No DDL changes in this merge."
+          else
+            echo "DDL files to run:"; echo "$FILES"
+            python scripts/run_ddl.py -t ${{ needs.resolve.outputs.target }} $FILES
+          fi
