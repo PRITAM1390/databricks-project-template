@@ -1,0 +1,33 @@
+# Example of a scheduled job. Reuses the silver and gold notebooks from sample_job.
+# Schedules are paused automatically in dev (development mode).
+resources:
+  jobs:
+    daily_refresh_job:
+      name: daily_refresh_job
+      schedule:
+        quartz_cron_expression: "0 0 6 * * ?"     # every day at 06:00
+        timezone_id: Asia/Kolkata
+        pause_status: UNPAUSED
+      email_notifications:
+        on_failure:
+          - ${var.alerts.platform}
+      tasks:
+        - task_key: silver_transform
+          notebook_task:
+            notebook_path: ../src/pipelines/silver/silver_transform.py
+            base_parameters:
+              bronze_catalog: ${var.catalogs.bronze}
+              bronze_schema: ${resources.schemas.bronze.name}
+              silver_catalog: ${var.catalogs.silver}
+              silver_schema: ${resources.schemas.silver.name}
+
+        - task_key: gold_aggregate
+          depends_on:
+            - task_key: silver_transform
+          notebook_task:
+            notebook_path: ../src/pipelines/gold/gold_aggregate.py
+            base_parameters:
+              silver_catalog: ${var.catalogs.silver}
+              silver_schema: ${resources.schemas.silver.name}
+              gold_catalog: ${var.catalogs.gold}
+              gold_schema: ${resources.schemas.gold.name}
