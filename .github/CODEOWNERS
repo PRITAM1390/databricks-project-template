@@ -1,0 +1,9 @@
+# Who must review changes to each area. Last matching line wins.
+# REPLACE the owners with your users or teams (e.g. @your-org/data-engineers).
+# Enforce it by enabling "Require review from Code Owners" in branch protection (uat, main).
+
+*                     @PRITAM1390    # REPLACE: default owners (data engineers)
+/.github/             @PRITAM1390    # REPLACE: CI/CD workflows (platform team)
+/databricks.yml       @PRITAM1390    # REPLACE: environments, permissions (platform team)
+/scripts/             @PRITAM1390    # REPLACE: CI tooling (platform team)
+/src/ddl/             @PRITAM1390    # REPLACE: table structures (data architects)
