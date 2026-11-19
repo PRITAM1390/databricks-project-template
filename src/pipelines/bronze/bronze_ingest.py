@@ -2,7 +2,8 @@
 # Bronze: land raw data as-is (table structure comes from src/ddl/bronze/orders.sql)
 
 # Make src/ importable so notebooks can use shared code in src/common
-import os, sys
+import os
+import sys
 sys.path.append(os.path.abspath("../.."))
 
 from common.audit import add_audit_columns
