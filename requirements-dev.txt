@@ -1,1 +1,1 @@
-ruff == 0.17.5 from ruff --version>
+ruff==0.17.5
