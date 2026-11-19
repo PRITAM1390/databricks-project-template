@@ -43,7 +43,7 @@ targets:
         sap_team: pritam.chaurasiya@ganitinc.com     # REPLACE
         # hr_team: your-email@example.com      # REPLACE
         # fin_team: your-email@example.com     # REPLACE
-      sql_warehouse_id: 8259552087648510
+      sql_warehouse_id: 1c87fe3d04bf9959
 
   # ---------- UAT: deployed after approval ----------
   uat:
@@ -63,7 +63,7 @@ targets:
         sap_team: your-email@example.com
         hr_team: your-email@example.com
         fin_team: your-email@example.com
-      sql_warehouse_id: 8259552087648510
+      sql_warehouse_id: 1c87fe3d04bf9959
     resources:
       schemas:
         bronze:
