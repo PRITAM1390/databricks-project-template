@@ -1,1 +1,2 @@
 ruff==0.17.5
+databricks-sdk==0.169.0
