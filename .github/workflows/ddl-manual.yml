@@ -1,0 +1,39 @@
+name: Run DDL manually
+
+on:
+  workflow_dispatch:
+    inputs:
+      target:
+        description: Environment (must match the branch you picked above)
+        required: true
+        type: choice
+        options: [dev, uat, prod]
+      files:
+        description: DDL file paths, space-separated (e.g. src/ddl/bronze/orders.sql)
+        required: true
+        type: string
+
+jobs:
+  run-ddl:
+    name: Run DDL (${{ inputs.target }})
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.target }}
+    env:
+      DATABRICKS_AUTH_TYPE: oauth-m2m
+      DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}
+      DATABRICKS_CLIENT_SECRET: ${{ secrets.DATABRICKS_CLIENT_SECRET }}
+      TARGET: ${{ inputs.target }}
+      FILES: ${{ inputs.files }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install tools
+        run: pip install -r requirements-dev.txt
+      - name: Install Databricks CLI
+        uses: databricks/setup-cli@main
+      - name: Run DDL
+        run: python scripts/run_ddl.py -t "$TARGET" $FILES
